@@ -44,14 +44,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const highlightMenu = () => {
         const scrollPos = window.scrollY;
         
-        // Minden szekció ellenőrzése
+        // Check each section
         sections.forEach(section => {
             const sectionTop = section.offsetTop - 100;
             const sectionHeight = section.offsetHeight;
             const sectionId = section.getAttribute('id');
             
             if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
-                // Aktív link keresése és kiemelése
+                // Find and highlight active link
                 navLinks.forEach(link => {
                     link.querySelector('a').classList.remove('active');
                     if (link.querySelector('a').getAttribute('href') === `#${sectionId}`) {
@@ -106,81 +106,88 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    // CTA gomb eseménykezelő
+    // CTA button event handler
     const ctaButton = document.querySelector('.cta-button');
     if (ctaButton) {
         ctaButton.addEventListener('click', () => {
-            const aboutSection = document.querySelector('#about');
+            const toolsSection = document.querySelector('#section2');
             window.scrollTo({
-                top: aboutSection.offsetTop - 70,
+                top: toolsSection.offsetTop - 70,
                 behavior: 'smooth'
             });
         });
     }
 
-    // Portfólió elemek hover effektus
-    const portfolioItems = document.querySelectorAll('.portfolio-item');
-    portfolioItems.forEach(item => {
-        item.addEventListener('mouseenter', () => {
-            const overlay = item.querySelector('.portfolio-overlay');
-            overlay.style.opacity = '1';
-            overlay.style.transform = 'translateY(0)';
+    // Tool cards hover effect
+    const toolCards = document.querySelectorAll('.tool-card, .utility-card, .resource-card');
+    toolCards.forEach(card => {
+        card.addEventListener('mouseenter', () => {
+            card.style.transform = 'translateY(-10px)';
+            card.style.boxShadow = '0 15px 30px rgba(0, 0, 0, 0.15)';
+            const icon = card.querySelector('i');
+            if (icon) {
+                icon.style.transform = 'scale(1.1)';
+            }
         });
         
-        item.addEventListener('mouseleave', () => {
-            const overlay = item.querySelector('.portfolio-overlay');
-            overlay.style.opacity = '0';
-            overlay.style.transform = 'translateY(20px)';
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'translateY(0)';
+            card.style.boxShadow = '0 8px 32px 0 rgba(0, 0, 0, 0.1)';
+            const icon = card.querySelector('i');
+            if (icon) {
+                icon.style.transform = 'scale(1)';
+            }
         });
     });
 
-    // Űrlap elküldés kezelése
-    const contactForm = document.querySelector('.contact-form form');
-    if (contactForm) {
-        contactForm.addEventListener('submit', e => {
-            e.preventDefault();
+    // Toggle switches functionality
+    const toggleSwitches = document.querySelectorAll('.switch input[type="checkbox"]');
+    toggleSwitches.forEach(toggle => {
+        toggle.addEventListener('change', () => {
+            const settingName = toggle.parentElement.previousElementSibling.textContent;
+            console.log(`Setting "${settingName}" changed to: ${toggle.checked}`);
             
-            // Űrlap adatok összegyűjtése
-            const formData = new FormData(contactForm);
-            const formValues = Object.fromEntries(formData.entries());
-            
-            // Itt lenne az AJAX kérés a szerver felé
-            console.log('Űrlap adatok:', formValues);
-            
-            // Sikeres küldés visszajelzés
-            alert('Köszönjük üzenetét! Hamarosan felvesszük Önnel a kapcsolatot.');
-            contactForm.reset();
+            // Handle dark mode toggle
+            if (settingName.includes('Dark Mode')) {
+                if (toggle.checked) {
+                    document.body.classList.add('dark-mode');
+                } else {
+                    document.body.classList.remove('dark-mode');
+                }
+            }
         });
-    }
+    });
 
     // Animációk hozzáadása a szekcióelemekhez
     const addAnimationClasses = () => {
-        // Rólunk szekció
-        const aboutSection = document.querySelector('.about-section');
-        if (aboutSection) {
-            aboutSection.querySelector('.about-text').classList.add('reveal', 'reveal-left');
-            aboutSection.querySelector('.about-image').classList.add('reveal', 'reveal-right');
-        }
-        
-        // Szolgáltatások szekció
-        const serviceCards = document.querySelectorAll('.service-card');
-        serviceCards.forEach((card, index) => {
+        // Tools section
+        const toolCards = document.querySelectorAll('.tool-card');
+        toolCards.forEach((card, index) => {
             card.classList.add('reveal', 'reveal-bottom');
             card.style.transitionDelay = `${index * 0.1}s`;
         });
         
-        // Portfólió szekció
-        const portfolioItems = document.querySelectorAll('.portfolio-item');
-        portfolioItems.forEach((item, index) => {
-            item.classList.add('reveal', 'reveal-bottom');
-            item.style.transitionDelay = `${index * 0.1}s`;
+        // Utilities section
+        const utilityCards = document.querySelectorAll('.utility-card');
+        utilityCards.forEach((card, index) => {
+            card.classList.add('reveal', 'reveal-bottom');
+            card.style.transitionDelay = `${index * 0.1}s`;
         });
         
-        // Kapcsolat szekció
-        const contactSection = document.querySelector('.contact-section');
-        if (contactSection) {
-            contactSection.querySelector('.contact-info').classList.add('reveal', 'reveal-left');
-            contactSection.querySelector('.contact-form').classList.add('reveal', 'reveal-right');
+        // Resources section
+        const resourceCards = document.querySelectorAll('.resource-card');
+        resourceCards.forEach((card, index) => {
+            card.classList.add('reveal', 'reveal-bottom');
+            card.style.transitionDelay = `${index * 0.1}s`;
+        });
+        
+        // Settings section
+        const settingsSection = document.querySelector('.settings-section');
+        if (settingsSection) {
+            const settingsContainer = settingsSection.querySelector('.settings-container');
+            if (settingsContainer) {
+                settingsContainer.classList.add('reveal', 'reveal-bottom');
+            }
         }
     };
 
@@ -214,17 +221,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 100);
 });
 
-// Oldal betöltés animáció
+// Page load animation
 window.addEventListener('load', () => {
-    // Betöltő képernyő elrejtése (ha lenne)
+    // Hide preloader (if there was one)
     // const preloader = document.querySelector('.preloader');
     // if (preloader) {
     //     preloader.classList.add('preloader-finish');
     // }
     
-    // Hero szekció animációk
+    // Hero section animations
     const heroContent = document.querySelector('.hero-content');
     if (heroContent) {
         heroContent.style.opacity = '1';
     }
+    
+    // Initialize tool buttons
+    const toolButtons = document.querySelectorAll('.tool-button');
+    toolButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            const toolName = button.parentElement.querySelector('h3').textContent;
+            console.log(`Opening tool: ${toolName}`);
+            alert(`${toolName} will open here. This functionality will be implemented later.`);
+        });
+    });
 });
