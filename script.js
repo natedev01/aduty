@@ -7,6 +7,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const navbar = document.querySelector('.navbar');
     const sections = document.querySelectorAll('section');
     const revealElements = document.querySelectorAll('.reveal');
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    
+    // Sötét mód alapértelmezetten bekapcsolva
+    document.body.classList.add('dark-mode');
+    if (darkModeToggle) {
+        darkModeToggle.checked = true;
+    }
 
     // Navigációs menü toggle funkció
     const navSlide = () => {
@@ -106,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    // CTA button event handler
+    // CTA gomb eseménykezelő
     const ctaButton = document.querySelector('.cta-button');
     if (ctaButton) {
         ctaButton.addEventListener('click', () => {
@@ -118,12 +125,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Tool cards hover effect
+    // Eszköz kártyák hover effektus
     const toolCards = document.querySelectorAll('.tool-card, .utility-card, .resource-card');
     toolCards.forEach(card => {
         card.addEventListener('mouseenter', () => {
             card.style.transform = 'translateY(-10px)';
-            card.style.boxShadow = '0 15px 30px rgba(0, 0, 0, 0.15)';
+            card.style.boxShadow = '0 15px 30px rgba(0, 0, 0, 0.3)';
             const icon = card.querySelector('i');
             if (icon) {
                 icon.style.transform = 'scale(1.1)';
@@ -132,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         card.addEventListener('mouseleave', () => {
             card.style.transform = 'translateY(0)';
-            card.style.boxShadow = '0 8px 32px 0 rgba(0, 0, 0, 0.1)';
+            card.style.boxShadow = '0 8px 32px 0 rgba(0, 0, 0, 0.2)';
             const icon = card.querySelector('i');
             if (icon) {
                 icon.style.transform = 'scale(1)';
@@ -140,21 +147,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Toggle switches functionality
-    const toggleSwitches = document.querySelectorAll('.switch input[type="checkbox"]');
+    // Kapcsolók funkcionalitása
+    const toggleSwitches = document.querySelectorAll('.switch input[type="checkbox"]:not(#darkModeToggle)');
     toggleSwitches.forEach(toggle => {
         toggle.addEventListener('change', () => {
             const settingName = toggle.parentElement.previousElementSibling.textContent;
-            console.log(`Setting "${settingName}" changed to: ${toggle.checked}`);
-            
-            // Handle dark mode toggle
-            if (settingName.includes('Dark Mode')) {
-                if (toggle.checked) {
-                    document.body.classList.add('dark-mode');
-                } else {
-                    document.body.classList.remove('dark-mode');
-                }
-            }
+            console.log(`"${settingName}" beállítás megváltoztatva: ${toggle.checked}`);
         });
     });
 
@@ -221,28 +219,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 100);
 });
 
-// Page load animation
+// Oldal betöltés animáció
 window.addEventListener('load', () => {
-    // Hide preloader (if there was one)
+    // Betöltő képernyő elrejtése (ha lenne)
     // const preloader = document.querySelector('.preloader');
     // if (preloader) {
     //     preloader.classList.add('preloader-finish');
     // }
     
-    // Hero section animations
+    // Hero szekció animációk
     const heroContent = document.querySelector('.hero-content');
     if (heroContent) {
         heroContent.style.opacity = '1';
     }
     
-    // Initialize tool buttons
+    // Eszköz gombok inicializálása
     const toolButtons = document.querySelectorAll('.tool-button');
     toolButtons.forEach(button => {
         button.addEventListener('click', (e) => {
             e.preventDefault();
             const toolName = button.parentElement.querySelector('h3').textContent;
-            console.log(`Opening tool: ${toolName}`);
-            alert(`${toolName} will open here. This functionality will be implemented later.`);
+            console.log(`Eszköz megnyitása: ${toolName}`);
+            alert(`A "${toolName}" eszköz itt fog megnyílni. Ez a funkció később lesz implementálva.`);
         });
     });
 });
